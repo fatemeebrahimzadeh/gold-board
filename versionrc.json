@@ -1,0 +1,9 @@
+{
+  "types": [
+    {"type": "feat", "section": "✨ Features / قابلیت‌های جدید"},
+    {"type": "fix", "section": "🐛 Bug Fixes / رفع باگ‌ها"},
+    {"type": "docs", "section": "📝 Documentation / مستندات"},
+    {"type": "style", "section": "🎨 Styling / ظاهر و استایل"},
+    {"type": "refactor", "section": "♻️ Refactoring / بازنویسی کد"}
+  ]
+}
