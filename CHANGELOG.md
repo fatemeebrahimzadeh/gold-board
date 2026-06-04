@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.3](https://github.com/fatemeebrahimzadeh/gold-board/compare/v0.1.2...v0.1.3) (2026-06-04)
+
+
+### Bug Fixes
+
+* **shop:** unwrap dynamic params for next.js 15+ compatibility ([8afffda](https://github.com/fatemeebrahimzadeh/gold-board/commit/8afffdae8e57e82fc2c7766f18145fed363486e8))
+
 ### [0.1.2](https://github.com/fatemeebrahimzadeh/gold-board/compare/v0.1.1...v0.1.2) (2026-06-04)
 
 
