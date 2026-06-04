@@ -1,0 +1,22 @@
+{
+  "name": "Smart Gold Board Engine",
+  "short_name": "GoldBoard",
+  "description": "High-frequency real-time gold & currency display board.",
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
