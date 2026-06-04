@@ -3,6 +3,8 @@
 import { useEffect } from 'react'
 import { usePriceStore } from '@/store/usePriceStore'
 
+import OfflineIndicator from '@/components/OfflineIndicator';
+
 export default function Home() {
   const { prices, isLoading, connectToStream, disconnectStream } = usePriceStore()
 
@@ -26,6 +28,7 @@ export default function Home() {
 
   return (
     <div className="p-8 bg-gray-950 text-white min-h-screen">
+      <OfflineIndicator />
       <h1 className="text-xl font-bold mb-4">بورد لحظه‌ای قیمت‌ها</h1>
       <div className="p-4 bg-gray-900 rounded-lg max-w-sm">
         <p className="text-gray-400">قیمت تتر (دلار فیک نوسانی):</p>
