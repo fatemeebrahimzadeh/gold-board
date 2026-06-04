@@ -1,10 +1,19 @@
 'use client';
+import { useQuery } from '@tanstack/react-query';
+import { fetchAds } from '@/lib/api';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 type Ad = { mediaUrl: string; duration: number };
 
-export default function AdCarousel({ ads }: { ads: Ad[] }) {
+export default function AdCarousel({ serverAds }: { serverAds: Ad[] }) {
+  const { data: ads } = useQuery({
+    queryKey: ['ads'],
+    queryFn: fetchAds, 
+    initialData: serverAds, 
+    staleTime: Infinity, 
+  });
+  
   const [index, setIndex] = useState(0);
 
   useEffect(() => {

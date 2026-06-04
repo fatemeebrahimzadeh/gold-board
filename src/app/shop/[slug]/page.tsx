@@ -8,12 +8,10 @@ import AdCarousel from '@/components/AdCarousel';
 export default async function ShopPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   
-  // ۱. پیدا کردن مغازه (برای نمایش اسمش)
   const [shop] = await db.select().from(tenants).where(eq(tenants.slug, slug));
   if (!shop) notFound();
 
-  // ۲. گرفتن تمام تبلیغات عمومی (بدون فیلتر)
-  const allAds = await db.select().from(ads);
+  const initialAds = await db.select().from(ads);
 
   return (
     <div className="p-10">
@@ -21,8 +19,8 @@ export default async function ShopPage({ params }: { params: Promise<{ slug: str
       <p className="text-2xl text-slate-400">
         خوش آمدید - تابلو اختصاصی
       </p>
-      {allAds.length > 0 ? (
-        <AdCarousel ads={allAds} />
+      {initialAds.length > 0 ? (
+        <AdCarousel serverAds={initialAds} />
       ) : (
         <p>تبلیغی موجود نیست.</p>
       )}
