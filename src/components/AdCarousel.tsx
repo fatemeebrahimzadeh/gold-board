@@ -11,7 +11,7 @@ export default function AdCarousel({ serverAds }: { serverAds: Ad[] }) {
     queryKey: ['ads'],
     queryFn: fetchAds, 
     initialData: serverAds, 
-    staleTime: Infinity, 
+    staleTime: 1000 * 60 * 60 * 24, // 24 hours
   });
   
   const [index, setIndex] = useState(0);
