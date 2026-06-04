@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "release": "standard-version",
+    "push-release": "git push --follow-tags origin master",
+    "release:full": "standard-version && git push --follow-tags origin master",
     "prepare": "husky"
   },
   "dependencies": {
