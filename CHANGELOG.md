@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.6](https://github.com/fatemeebrahimzadeh/gold-board/compare/v0.1.5...v0.1.6) (2026-06-06)
+
+
+### Bug Fixes
+
+* make price SSE stream work reliably on Vercel and preserve decimal formatting ([b00bf17](https://github.com/fatemeebrahimzadeh/gold-board/commit/b00bf17d95af7e84df296035fcde0ee223599011))
+
 ### [0.1.5](https://github.com/fatemeebrahimzadeh/gold-board/compare/v0.1.4...v0.1.5) (2026-06-06)
 
 
