@@ -56,10 +56,12 @@ async function getFreshPrices(): Promise<PriceData | null> {
 }
 
 export async function GET(): Promise<NextResponse> {
+  
   const encoder: TextEncoder = new TextEncoder()
-
+  
   const stream: ReadableStream<Uint8Array> = new ReadableStream<Uint8Array>({
     async start(controller: ReadableStreamDefaultController<Uint8Array>): Promise<void> {
+      controller.enqueue(encoder.encode(`data: {"status": "connected"}\n\n`));
       
       const initialPrices: PriceData | null = await getFreshPrices()
       if (initialPrices) {
@@ -90,6 +92,7 @@ export async function GET(): Promise<NextResponse> {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache, no-transform',
       'Connection': 'keep-alive',
+      'X-Accel-Buffering': 'no',
     },
   })
 }
