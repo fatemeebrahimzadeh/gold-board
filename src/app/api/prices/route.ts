@@ -6,6 +6,7 @@ import { PriceData } from '@/types/price'
 // 'force-dynamic' ensures Next.js doesn't freeze/statically optimize this route during build.
 // ============================================================================
 export const dynamic = 'force-dynamic'
+export const runtime = 'edge'
 
 const API_URL: string | undefined = process.env.PRICE_PROVIDER_URL
 const API_KEY: string | undefined = process.env.TGJU_API_KEY
@@ -17,8 +18,6 @@ interface CoinGeckoResponse {
 }
 
 async function getFreshPrices(): Promise<PriceData | null> {
-  if (!API_URL || !API_KEY) return null
-
   try {
     // ==========================================
     // ARCHITECTURAL DECISION: Why native fetch instead of Axios here?
@@ -37,14 +36,36 @@ async function getFreshPrices(): Promise<PriceData | null> {
     // if (!response.ok) return null
     // const rawData = (await response.json()) as CoinGeckoResponse
 
-        const mockDollar = Math.floor(60000 + Math.random() * 1000);
+    if (API_URL && API_KEY) {
+      const response: Response = await fetch(API_URL, {
+        headers: {
+          Authorization: `Bearer ${API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        cache: 'no-store',
+      })
+
+      if (!response.ok) return null
+      const rawData = (await response.json()) as CoinGeckoResponse
+
+      return {
+        gold18k: 0,
+        gold24k: 0,
+        coinEmami: 0,
+        coinBaharan: 0,
+        dollar: Number(rawData.tether?.usd || 0),
+        euro: 0,
+        lastUpdated: new Date().toLocaleTimeString('fa-IR'),
+      }
+    }
+
+    const mockDollar = Number((60000 + Math.random() * 1000).toFixed(2))
 
     return {
-      gold18k: 0, 
+      gold18k: 0,
       gold24k: 0,
-      coinEmami: 0, 
+      coinEmami: 0,
       coinBaharan: 0,
-      // dollar: Number(rawData.tether?.usd || 0), 
       dollar: mockDollar,
       euro: 0,
       lastUpdated: new Date().toLocaleTimeString('fa-IR'),
@@ -56,32 +77,25 @@ async function getFreshPrices(): Promise<PriceData | null> {
 }
 
 export async function GET(): Promise<NextResponse> {
-  
   const encoder: TextEncoder = new TextEncoder()
-  
+  let intervalId: ReturnType<typeof setInterval> | undefined
+
   const stream: ReadableStream<Uint8Array> = new ReadableStream<Uint8Array>({
     async start(controller: ReadableStreamDefaultController<Uint8Array>): Promise<void> {
-      controller.enqueue(encoder.encode(`data: {"status": "connected"}\n\n`));
-      
       const initialPrices: PriceData | null = await getFreshPrices()
       if (initialPrices) {
         controller.enqueue(encoder.encode(`data: ${JSON.stringify(initialPrices)}\n\n`))
       }
 
-      const intervalId: NodeJS.Timeout = setInterval(async (): Promise<void> => {
+      intervalId = setInterval(async (): Promise<void> => {
         const freshPrices: PriceData | null = await getFreshPrices()
         if (freshPrices) {
-          try {
-            controller.enqueue(encoder.encode(`data: ${JSON.stringify(freshPrices)}\n\n`))
-          } catch (err: unknown) {
-            console.error('Stream enqueue error, client likely closed tab:', err)
-            clearInterval(intervalId)
-            controller.close()
-          }
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify(freshPrices)}\n\n`))
         }
       }, 3000)
-
-      controller.close = (): void => {
+    },
+    cancel(): void {
+      if (intervalId) {
         clearInterval(intervalId)
       }
     }
@@ -90,7 +104,7 @@ export async function GET(): Promise<NextResponse> {
   return new NextResponse(stream, {
     headers: {
       'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache, no-transform',
+      'Cache-Control': 'no-cache, no-transform, no-store, must-revalidate',
       'Connection': 'keep-alive',
       'X-Accel-Buffering': 'no',
     },
