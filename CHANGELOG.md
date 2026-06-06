@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.8](https://github.com/fatemeebrahimzadeh/gold-board/compare/v0.1.7...v0.1.8) (2026-06-06)
+
+
+### Bug Fixes
+
+* sync lockfile after removing pwa dependency ([0c3a9b7](https://github.com/fatemeebrahimzadeh/gold-board/commit/0c3a9b7bc420e0af1751fa332111d358db4978f5))
+
 ### [0.1.7](https://github.com/fatemeebrahimzadeh/gold-board/compare/v0.1.6...v0.1.7) (2026-06-06)
 
 
