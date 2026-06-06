@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.7](https://github.com/fatemeebrahimzadeh/gold-board/compare/v0.1.6...v0.1.7) (2026-06-06)
+
+
+### Features
+
+* add offline pwa support with cached prices and ads ([e3ed7bf](https://github.com/fatemeebrahimzadeh/gold-board/commit/e3ed7bf7c05ad0836e59fdc0a86ad36032cc1e30))
+
 ### [0.1.6](https://github.com/fatemeebrahimzadeh/gold-board/compare/v0.1.5...v0.1.6) (2026-06-06)
 
 
