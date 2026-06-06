@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.5](https://github.com/fatemeebrahimzadeh/gold-board/compare/v0.1.4...v0.1.5) (2026-06-06)
+
+
+### Bug Fixes
+
+* **api:** improve sse streaming stability and add connection status ping ([514ba21](https://github.com/fatemeebrahimzadeh/gold-board/commit/514ba214b1175230154345f86f5f1d51d3b339e0))
+
 ### [0.1.4](https://github.com/fatemeebrahimzadeh/gold-board/compare/v0.1.3...v0.1.4) (2026-06-06)
 
 
