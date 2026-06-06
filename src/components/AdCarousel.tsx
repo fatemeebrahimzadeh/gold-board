@@ -4,7 +4,7 @@ import { fetchAds } from '@/lib/api';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-type Ad = { mediaUrl: string; duration: number };
+type Ad = { mediaUrl: string; duration: number | null };
 
 export default function AdCarousel({ serverAds }: { serverAds: Ad[] }) {
   const { data: ads } = useQuery({
