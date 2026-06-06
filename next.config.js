@@ -1,5 +1,5 @@
 const nextConfig = {
-  // هیچ تنظیماتی اینجا نباشد
+  turbopack: {},
 };
 
 export default nextConfig;

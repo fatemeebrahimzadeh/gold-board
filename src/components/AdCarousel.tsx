@@ -14,22 +14,33 @@ export default function AdCarousel({ serverAds }: { serverAds: Ad[] }) {
     staleTime: 1000 * 60 * 60 * 24, // 24 hours
   });
   
+  const safeAds = ads ?? serverAds;
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
+    if (!safeAds || safeAds.length === 0) return
+
     const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % ads.length);
-    }, ads[index].duration * 1000);
+      setIndex((prev) => (prev + 1) % safeAds.length);
+    }, (safeAds[index]?.duration ?? 5) * 1000);
 
     return () => clearInterval(timer);
-  }, [index, ads]);
+  }, [index, safeAds]);
+
+  if (!safeAds || safeAds.length === 0) {
+    return (
+      <div className="flex h-[60vh] items-center justify-center rounded-xl border border-dashed border-gray-700 bg-gray-900 text-sm text-gray-400">
+        No cached ads available offline.
+      </div>
+    );
+  }
 
   return (
     <div className="relative w-full h-[60vh] overflow-hidden rounded-xl">
       <AnimatePresence mode="wait">
         <motion.img
-            key={ads[index].mediaUrl}
-            src={ads[index].mediaUrl}
+            key={safeAds[index].mediaUrl}
+            src={safeAds[index].mediaUrl}
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

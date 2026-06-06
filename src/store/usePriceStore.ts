@@ -1,6 +1,30 @@
 import { create } from 'zustand'
 import { PriceData } from '@/types/price'
 
+const PRICE_CACHE_KEY = 'gold-board-price-cache'
+
+function loadCachedPrices(): PriceData | null {
+  if (typeof window === 'undefined') return null
+
+  try {
+    const cachedValue = window.localStorage.getItem(PRICE_CACHE_KEY)
+    if (!cachedValue) return null
+    return JSON.parse(cachedValue) as PriceData
+  } catch {
+    return null
+  }
+}
+
+function saveCachedPrices(prices: PriceData): void {
+  if (typeof window === 'undefined') return
+
+  try {
+    window.localStorage.setItem(PRICE_CACHE_KEY, JSON.stringify(prices))
+  } catch {
+    // Ignore storage quota and privacy mode errors.
+  }
+}
+
 interface PriceState {
   prices: PriceData
   isLoading: boolean
@@ -13,8 +37,7 @@ interface PriceState {
   disconnectStream: () => void
 }
 
-export const usePriceStore = create<PriceState>((set, get) => ({
-  prices: {
+const defaultPrices: PriceData = {
     gold18k: 0,
     gold24k: 0,
     coinEmami: 0,
@@ -22,16 +45,29 @@ export const usePriceStore = create<PriceState>((set, get) => ({
     dollar: 0,
     euro: 0,
     lastUpdated: '',
-  },
+}
+
+const initialPrices = loadCachedPrices() || defaultPrices
+
+export const usePriceStore = create<PriceState>((set, get) => ({
+  prices: initialPrices,
   isLoading: true, 
   isConnected: false,
   error: null,
   eventSource: null,
   
   setPrices: (newPrices) =>
-    set((state) => ({
-      prices: { ...state.prices, ...newPrices, lastUpdated: new Date().toLocaleTimeString('fa-IR') },
-    })),
+    set((state) => {
+      const nextPrices = {
+        ...state.prices,
+        ...newPrices,
+        lastUpdated: new Date().toLocaleTimeString('fa-IR'),
+      }
+
+      saveCachedPrices(nextPrices)
+
+      return { prices: nextPrices }
+    }),
     
   setConnectionStatus: (status) => set({ isConnected: status }),
 
@@ -46,11 +82,21 @@ export const usePriceStore = create<PriceState>((set, get) => ({
     source.onmessage = (event: MessageEvent) => {
       try {
         const freshPrices = JSON.parse(event.data) as Partial<PriceData>
-        
-        set((state) => ({
-          prices: { 
-            ...state.prices, 
-            ...freshPrices 
+        const currentPrices = get().prices
+        const nextPrices = {
+          ...currentPrices,
+          ...freshPrices,
+        }
+
+        saveCachedPrices({
+          ...nextPrices,
+          lastUpdated: nextPrices.lastUpdated || new Date().toLocaleTimeString('fa-IR'),
+        })
+
+        set(() => ({
+          prices: {
+            ...nextPrices,
+            lastUpdated: nextPrices.lastUpdated || new Date().toLocaleTimeString('fa-IR'),
           },
           isLoading: false,
           isConnected: true,
@@ -63,9 +109,14 @@ export const usePriceStore = create<PriceState>((set, get) => ({
 
     source.onerror = (err: Event) => {
       console.error('SSE connection error in Zustand:', err)
+      const cachedPrices = loadCachedPrices()
       set({ 
         isConnected: false, 
-        error: 'خطا در دریافت زنده قیمت‌ها. در حال تلاش برای اتصال مجدد...' 
+        isLoading: false,
+        prices: cachedPrices || get().prices,
+        error: cachedPrices
+          ? 'آفلاین هستید. داده‌های کش‌شده نمایش داده می‌شوند.'
+          : 'خطا در دریافت زنده قیمت‌ها. داده‌ای برای نمایش آفلاین نداریم.' 
       })
     }
 
