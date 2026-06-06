@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.4](https://github.com/fatemeebrahimzadeh/gold-board/compare/v0.1.3...v0.1.4) (2026-06-06)
+
+
+### Features
+
+* **ads:** implement hybrid loading and caching strategy ([5805b7a](https://github.com/fatemeebrahimzadeh/gold-board/commit/5805b7a4444397149878027a9274cae9dc7988cf))
+* **query:** implement offline-first persistence and update architecture documentation ([04826ac](https://github.com/fatemeebrahimzadeh/gold-board/commit/04826ac8eefbd655980a27a9e2ae178a1c151432))
+* **ui:** add offline indicator to gold price page ([8685c70](https://github.com/fatemeebrahimzadeh/gold-board/commit/8685c70ff6b626f74078573c1d13f6aaafd6276c))
+
 ### [0.1.3](https://github.com/fatemeebrahimzadeh/gold-board/compare/v0.1.2...v0.1.3) (2026-06-04)
 
 
